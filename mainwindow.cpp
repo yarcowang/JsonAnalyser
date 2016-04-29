@@ -8,7 +8,9 @@
 #include <QMessageBox>
 #include <QJsonParseError>
 
-#include "myjsonmodel.h"
+#include "newfromurldialog.h"
+#include "myjsonmodelitem.h"
+#include "QtAwesome.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -33,6 +35,23 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->btAnalyse->setIcon(awesome->icon(fa::rocket));
   ui->btAnalyse->setToolTip(tr("analyse it"));
   ui->btAnalyse->setEnabled(false);
+
+  QVBoxLayout* layout = new QVBoxLayout;
+  QLabel* p;
+  p = new QLabel("<b>Symbols:</b> @=object | ..@..=objects,show one | (n)=array has n items");
+  layout->addWidget(p);
+  QString s;
+  s = "<b>Colors:</b> ";
+  for(int i = 0; i < MyJsonModelItem::T_LEN; i++) {
+    s += QString("<font color=\"%1\">%2</font> | ").arg(MyJsonModelItem::mapType2Color[i], MyJsonModelItem::mapType2Label[i]);
+  }
+  p = new QLabel(s);
+  layout->addWidget(p);
+  ui->fmLabels->setLayout(layout);
+
+  model = new MyJsonModel;
+  ui->tvJsonView->setModel(model);
+  ui->tvJsonView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 MainWindow::~MainWindow()
@@ -71,6 +90,11 @@ bool MainWindow::validateJson()
 
 	ui->btIndent->setEnabled(ret);
 	ui->btAnalyse->setEnabled(ret);
+
+	if (ui->cbAuto->checkState() == Qt::Checked) {
+		model->loadJson(ui->teJson->toPlainText().toUtf8(), &e);
+		ui->tvJsonView->expandAll();
+	}
 
 	return ret;
 }
@@ -136,5 +160,21 @@ void MainWindow::on_btIndent_clicked()
 	ret = m.loadJson(ui->teJson->toPlainText().toUtf8(), &e);
 	if (ret) {
 		ui->teJson->setPlainText(QString(m.toJson()));
+	}
+}
+
+void MainWindow::on_btAnalyse_clicked()
+{
+	QJsonParseError e;
+	model->loadJson(ui->teJson->toPlainText().toUtf8(), &e);
+	ui->tvJsonView->expandAll();
+}
+
+void MainWindow::on_cbAuto_toggled(bool checked)
+{
+	if (checked) {
+		QJsonParseError e;
+		model->loadJson(ui->teJson->toPlainText().toUtf8(), &e);
+		ui->tvJsonView->expandAll();
 	}
 }

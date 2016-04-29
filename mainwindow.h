@@ -2,13 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-#include "QtAwesome.h"
-#include "newfromurldialog.h"
+#include "myjsonmodel.h"
 
 namespace Ui {
   class MainWindow;
 }
+
+class QtAwesome;
+class NewFromUrlDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -33,6 +34,10 @@ private slots:
 
   void on_btIndent_clicked();
 
+  void on_btAnalyse_clicked();
+
+  void on_cbAuto_toggled(bool checked);
+
 private:
   Ui::MainWindow *ui;
 
@@ -44,6 +49,8 @@ private:
   void toggle_leftDock(int isShow = 0);
 
   bool validateJson();
+
+  MyJsonModel* model;
 
 };
 

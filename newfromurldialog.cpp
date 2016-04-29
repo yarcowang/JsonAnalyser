@@ -30,6 +30,7 @@ void NewFromUrlDialog::leaveEvent(QEvent *)
 
 void NewFromUrlDialog::on_leUrl_textChanged(const QString &arg1)
 {
+  Q_UNUSED(arg1);
   ui->btGet->setEnabled(ui->leUrl->hasAcceptableInput());
 }
 

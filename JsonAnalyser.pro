@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     newfromurldialog.cpp \
-    myjsonmodel.cpp
+    myjsonmodel.cpp \
+    myjsonmodelitem.cpp
 
 HEADERS  += mainwindow.h \
     newfromurldialog.h \
-    myjsonmodel.h
+    myjsonmodel.h \
+    myjsonmodelitem.h
 
 FORMS    += mainwindow.ui \
     newfromurldialog.ui
